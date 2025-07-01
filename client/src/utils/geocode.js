@@ -1,7 +1,7 @@
 // geocode.js
 import axios from 'axios'
 
-const GEOCODING_API_KEY = 'AIzaSyBPLgNO6gk4C0mPs2mgsYWRT5bzwGQYz3A'
+const GEOCODING_API_KEY = process.env.GEOCODING_API_KEY
 
 export const getCoordinatesFromAddress = async address => {
   try {
