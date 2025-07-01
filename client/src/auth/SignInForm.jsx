@@ -1,0 +1,149 @@
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Link, useNavigate } from "react-router";
+import useAuthStore from "../store/useAuthStore";
+import { useEffect } from "react";
+
+export default function SignInForm() {
+  const navigate = useNavigate();
+  const { login, user } = useAuthStore();
+
+  useEffect(() => {
+    if (user) {
+      // Redirect based on role
+      if (
+        user.role === "admin" ||
+        user.role === "agent" ||
+        user.role === "customer"
+      ) {
+        navigate("/dashboard", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [user, navigate]);
+
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const formData = new FormData(form);
+    const signinData = Object.fromEntries(formData.entries());
+    console.log(signinData);
+    try {
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/users/login`,
+        signinData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data?.data?.user);
+      login(data?.data?.user, data?.data?.accessToken);
+      // Navigate based on user role
+      const role = data?.data?.user?.role;
+      if (role === "admin" || role === "agent" || role === "customer") {
+        navigate("/dashboard");
+      } else {
+        // fallback
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Something went wrong!");
+    }
+  };
+  if (user) return null;
+  return (
+    <>
+      {/*
+        This example requires updating your template:
+
+        ```
+        <html class="h-full bg-white">
+        <body class="h-full">
+        ```
+      */}
+      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            alt="Your Company"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+            className="mx-auto h-10 w-auto"
+          />
+          <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
+            Sign in to your account
+          </h2>
+        </div>
+
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form onSubmit={handleSignIn} className="space-y-6">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm/6 font-medium text-gray-900"
+              >
+                Email address
+              </label>
+              <div className="mt-2">
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between">
+                <label
+                  htmlFor="password"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Password
+                </label>
+                <div className="text-sm">
+                  <a
+                    href="#"
+                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+              </div>
+              <div className="mt-2">
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  required
+                  autoComplete="current-password"
+                  className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                />
+              </div>
+            </div>
+
+            <div>
+              <button
+                type="submit"
+                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                Sign in
+              </button>
+            </div>
+          </form>
+          <div className="text-sm mt-4">
+            <Link
+              to="/signup"
+              className="font-semibold text-indigo-600 hover:text-indigo-500"
+            >
+              Create an account
+            </Link>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
