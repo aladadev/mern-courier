@@ -25,6 +25,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
+app.use(express.static(path.join(__dirname, '../client/dist')))
 
 app.use(
   session({
@@ -57,6 +58,10 @@ app.use('/api/users', require('./routes/user.route'))
 app.use('/api/parcels', require('./routes/parcel.route'))
 app.use('/api/analytics', require('./routes/analytics.route'))
 app.use('/api/admin', require('./routes/admin.route'))
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'))
+})
 
 // catch 404 and forward to error handler
 app.use((err, req, res, next) => {

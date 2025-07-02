@@ -1,0 +1,21 @@
+{
+  "name": "courier-aladadev",
+  "version": "1.0.0",
+  "description": "A simplified MERN stack-based courier and parcel management system tailored for small logistics teams. It supports booking, assignment, tracking, and administrative operations.",
+  "homepage": "https://github.com/aladadev/mern-courier#readme",
+  "bugs": {
+    "url": "https://github.com/aladadev/mern-courier/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aladadev/mern-courier.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "build": "concurrently 'cd client && npm i && npm run build' 'cd ./server && npm i'",
+    "start": "cd ./server && node ./bin/www"
+  }
+}
