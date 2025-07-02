@@ -49,8 +49,8 @@ app.use(
       secure: process.env.NODE_ENV === 'production',
       maxAge: 1000 * 60 * 60 * 24 * 30,
       path: '/',
-      sameSite: 'lax',
-      // domain: config.cookie.domain,
+      sameSite: 'Strict',
+      domain: config.cookie.domain,
     },
   })
 )
