@@ -13,7 +13,7 @@
   "license": "ISC",
   "author": "",
   "scripts": {
-    "build": "npm i && concurrently 'cd client && npm i && npm run build' 'cd ./server && npm i'",
+    "build": "npm i && concurrently 'cd ./server && npm i'",
     "start": "node ./server/bin/www"
   },
   "dependencies": {
