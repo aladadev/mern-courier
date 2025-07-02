@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, '../client/dist')))
 
 app.use(
   session({
-    name: cookieNames.session,
+    // name: cookieNames.session,
     secret: config.secrets.session,
     resave: false,
     saveUninitialized: false,
@@ -45,7 +45,7 @@ app.use(
       maxAge: 1000 * 60 * 60 * 24 * 30,
       path: '/',
       sameSite: 'lax',
-      domain: config.cookie.domain,
+      // domain: config.cookie.domain,
     },
   })
 )
