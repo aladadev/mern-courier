@@ -14,11 +14,16 @@ const session = require('express-session')
 const { cookieNames } = require('./utils/constant')
 const app = express()
 const corsConfig = {
-  origin: ['http://localhost:5173'],
+  origin: ['https://mern-courier.onrender.com', 'http://mern-courier.onrender.com'],
   credentials: true,
 }
 
 connectDb()
+
+if (process.env.NODE_ENV === 'production') {
+  app.use('trust proxy', 1)
+}
+
 app.use(logger('dev'))
 app.use(cors(corsConfig))
 app.use(express.json())
