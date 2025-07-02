@@ -12,10 +12,11 @@
   },
   "license": "ISC",
   "author": "",
-  "type": "commonjs",
-  "main": "index.js",
   "scripts": {
-    "build": "concurrently 'cd client && npm i && npm run build' 'cd ./server && npm i'",
-     "start": "node ./server/bin/www"
+    "build": "npm i &&concurrently 'cd client && npm i && npm run build' 'cd ./server && npm i'",
+    "start": "node ./server/bin/www"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.0"
   }
 }
