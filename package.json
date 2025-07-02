@@ -16,6 +16,6 @@
   "main": "index.js",
   "scripts": {
     "build": "concurrently 'cd client && npm i && npm run build' 'cd ./server && npm i'",
-    "start": "cd ./server && node ./bin/www"
+     "start": "node ./server/bin/www"
   }
 }
