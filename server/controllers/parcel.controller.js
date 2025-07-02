@@ -12,12 +12,14 @@ exports.bookPickup = async (req, res, next) => {
     deliveryAddress,
     parcelType,
     size,
-    isCod = false,
+    isCOD = false,
     codAmount = 0,
   } = req.body;
 
   // Use authenticated user as customer
   const customer = req.user._id;
+
+  console.log("pickup", req.body);
 
   try {
     const platformCharge = determineParcelCharge(size);
@@ -29,7 +31,7 @@ exports.bookPickup = async (req, res, next) => {
       deliveryAddress,
       parcelType,
       size,
-      isCod,
+      isCOD,
       codAmount,
       platformCharge,
       trackingId,

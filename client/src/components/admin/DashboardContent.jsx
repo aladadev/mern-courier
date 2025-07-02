@@ -13,7 +13,7 @@ const DashboardContent = ({ metrics, bookings, onAgentAssignment, agents }) => (
     </div>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <MetricCard
-        title="Daily Bookings"
+        title="Total Bookings"
         value={metrics.dailyBookings.value}
         change={metrics.dailyBookings.change}
         trend={metrics.dailyBookings.trend}
@@ -34,11 +34,11 @@ const DashboardContent = ({ metrics, bookings, onAgentAssignment, agents }) => (
         icon={DollarSign}
       />
       <MetricCard
-        title="Active Users"
-        value={metrics.activeUsers.value}
-        change={metrics.activeUsers.change}
-        trend={metrics.activeUsers.trend}
-        icon={Users}
+        title="Total Deliveries"
+        value={metrics.totalDeliveries.value}
+        change={metrics.totalDeliveries.change}
+        trend={metrics.totalDeliveries.trend}
+        icon={Package}
       />
     </div>
     <div className="bg-white rounded-lg shadow-sm border border-gray-200">

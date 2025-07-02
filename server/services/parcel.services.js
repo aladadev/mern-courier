@@ -7,6 +7,14 @@ const BookingHistoryModel = require("../models/bookingHistory.model");
 
 exports.bookPickup = async (data) => {
   try {
+    // Map isCod (from controller) to isCOD (model)
+    if (typeof data.isCod !== "undefined") {
+      data.isCOD = data.isCod;
+      delete data.isCod;
+    }
+
+    console.log("Pickup data", data);
+
     const parcel = await ParcelModel.create(data);
 
     // Create initial booking history

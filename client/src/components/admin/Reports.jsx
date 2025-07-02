@@ -11,26 +11,51 @@ const Reports = ({ token }) => {
     setLoading(true);
     setError(null);
     try {
+      let response, filename;
       if (type === "users") {
-        await exportUsers(token, format);
-      } else if (type === "daily") {
-        await generateDeliveryReport(
+        response = await exportUsers(token, format);
+        filename = `users_report.${format}`;
+      } else if (type === "delivery") {
+        response = await generateDeliveryReport(
           token,
-          "daily",
+          "delivery",
           "2024-01-01",
           "2024-12-31",
           format
         );
-      } else if (type === "financial") {
-        await generateDeliveryReport(
+        filename = `delivery_report.${format}`;
+      } else if (type === "revenue") {
+        response = await generateDeliveryReport(
           token,
-          "financial",
+          "revenue",
           "2024-01-01",
           "2024-12-31",
           format
         );
+        filename = `revenue_report.${format}`;
+      } else if (type === "agent") {
+        response = await generateDeliveryReport(
+          token,
+          "agent",
+          "2024-01-01",
+          "2024-12-31",
+          format
+        );
+        filename = `agent_report.${format}`;
       }
-      toast.success("Report exported successfully");
+      if (response && response.data) {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        link.parentNode.removeChild(link);
+        window.URL.revokeObjectURL(url);
+        toast.success("Report exported successfully");
+      } else {
+        toast.error("No data received for export");
+      }
     } catch (e) {
       const msg = e && e.message ? e.message : "Failed to export report";
       setError(msg);
@@ -60,14 +85,14 @@ const Reports = ({ token }) => {
           <div className="flex gap-2">
             <button
               className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm"
-              onClick={() => handleExport("daily", "csv")}
+              onClick={() => handleExport("delivery", "csv")}
               disabled={loading}
             >
               Export CSV
             </button>
             <button
               className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm"
-              onClick={() => handleExport("daily", "pdf")}
+              onClick={() => handleExport("delivery", "pdf")}
               disabled={loading}
             >
               Export PDF
@@ -112,14 +137,41 @@ const Reports = ({ token }) => {
           <div className="flex gap-2">
             <button
               className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm"
-              onClick={() => handleExport("financial", "csv")}
+              onClick={() => handleExport("revenue", "csv")}
               disabled={loading}
             >
               Export CSV
             </button>
             <button
               className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm"
-              onClick={() => handleExport("financial", "pdf")}
+              onClick={() => handleExport("revenue", "pdf")}
+              disabled={loading}
+            >
+              Export PDF
+            </button>
+          </div>
+        </div>
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold text-gray-900">
+              Agent Report
+            </h3>
+            <Users className="w-6 h-6 text-emerald-600" />
+          </div>
+          <p className="text-gray-600 text-sm mb-4">
+            Agent performance and assignments
+          </p>
+          <div className="flex gap-2">
+            <button
+              className="flex-1 bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition-colors text-sm"
+              onClick={() => handleExport("agent", "csv")}
+              disabled={loading}
+            >
+              Export CSV
+            </button>
+            <button
+              className="flex-1 border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+              onClick={() => handleExport("agent", "pdf")}
               disabled={loading}
             >
               Export PDF

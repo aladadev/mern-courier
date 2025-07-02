@@ -8,7 +8,6 @@ const PARCEL_SIZES = [
   { value: "small", label: "Small (up to 2kg)", price: 5.99 },
   { value: "medium", label: "Medium (2-10kg)", price: 12.99 },
   { value: "large", label: "Large (10-25kg)", price: 24.99 },
-  { value: "extra-large", label: "Extra Large (25kg+)", price: 39.99 },
 ];
 const PARCEL_TYPES = ["document", "box", "fragile", "other"];
 
@@ -54,7 +53,7 @@ const BookingForm = ({
       pickupAddress: "",
       deliveryAddress: "",
       parcelSize: "small",
-      parcelType: "Document",
+      parcelType: "document",
       paymentMethod: "prepaid",
       codAmount: "",
       specialInstructions: "",
@@ -91,6 +90,7 @@ const BookingForm = ({
       codAmount: parseFloat(values?.codAmount),
     };
 
+    console.log("PArcel booking,", parcelBookingData);
     if (!validateAll()) {
       toast.error("Validation error");
       return;

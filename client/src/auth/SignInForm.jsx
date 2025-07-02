@@ -49,7 +49,9 @@ export default function SignInForm() {
       }
     } catch (err) {
       console.log(err);
-      toast.error("Something went wrong!");
+      toast.error(
+        err.response?.data?.error?.message || "Something went wrong!"
+      );
     }
   };
   if (user) return null;

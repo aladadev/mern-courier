@@ -1,5 +1,6 @@
 import axios from "./axiosInstance";
 import useAuthStore from "../store/useAuthStore";
+import moment from "moment";
 
 // Auth
 export const login = (data) => axios.post("/users/login", data);
@@ -100,6 +101,7 @@ export const getSystemStats = (token) =>
 export const exportUsers = (token, format = "csv", role = "customer") =>
   axios.get(`/admin/export/users?format=${format}&role=${role}`, {
     headers: { Authorization: `Bearer ${token}` },
+    responseType: "blob",
   });
 export const getBookingHistoryAdmin = (token, parcelId, userId, status) =>
   axios.get(
@@ -108,8 +110,9 @@ export const getBookingHistoryAdmin = (token, parcelId, userId, status) =>
   );
 
 // Analytics & Reports
-export const getDashboardMetrics = (token, startDate, endDate) =>
-  axios.get(`/analytics/dashboard?startDate=${startDate}&endDate=${endDate}`, {
+export const getDashboardMetrics = (token) =>
+  // ?startDate=${startDate}&endDate=${endDate}
+  axios.get(`/analytics/dashboard`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 export const getDailyAnalytics = (token, date) =>
@@ -130,29 +133,35 @@ export const generateDeliveryReport = (
 ) =>
   axios.get(
     `/analytics/reports?reportType=${reportType}&startDate=${startDate}&endDate=${endDate}&format=${format}`,
-    { headers: { Authorization: `Bearer ${token}` } }
+    { headers: { Authorization: `Bearer ${token}` }, responseType: "blob" }
   );
 export const getRevenueAnalytics = (
   token,
   startDate,
   endDate,
   groupBy = "daily"
-) =>
-  axios.get(
+) => {
+  let d = new Date();
+  startDate = moment(d).format("YYYY-MM-DD	");
+  d.setDate(d.getDate() + 1);
+  endDate = moment(d).format("YYYY-MM-DD	");
+
+  return axios.get(
     `/analytics/revenue?startDate=${startDate}&endDate=${endDate}&groupBy=${groupBy}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
+};
 export const getDeliveryAnalytics = (token, startDate, endDate) =>
   axios.get(`/analytics/delivery?startDate=${startDate}&endDate=${endDate}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
 // Agent Analytics
-export const getAgentDashboardMetrics = (token, startDate, endDate) =>
-  axios.get(
-    `/analytics/agent/dashboard?startDate=${startDate}&endDate=${endDate}`,
-    { headers: { Authorization: `Bearer ${token}` } }
-  );
+export const getAgentDashboardMetrics = (token) =>
+  // ?startDate=${startDate}&endDate=${endDate}
+  axios.get(`/analytics/agent/dashboard`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 export const getAgentDailyAnalytics = (token, date) =>
   axios.get(`/analytics/agent/daily/${date}`, {
     headers: { Authorization: `Bearer ${token}` },

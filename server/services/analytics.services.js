@@ -39,7 +39,8 @@ exports.getDashboardMetrics = async ({ startDate, endDate }) => {
       {
         $match: {
           isCOD: true,
-          createdAt: { $gte: start, $lte: end },
+          // status: "delivered",
+          // deliveredAt: { $gte: start, $lte: end },
         },
       },
       {
@@ -47,6 +48,13 @@ exports.getDashboardMetrics = async ({ startDate, endDate }) => {
           _id: null,
           totalCODAmount: { $sum: "$codAmount" },
           totalPlatformCharges: { $sum: "$platformCharge" },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          totalCODAmount: 1,
+          totalPlatformCharges: 1,
         },
       },
     ]);
@@ -192,7 +200,8 @@ exports.generateDailyAnalytics = async (date) => {
         {
           $match: {
             isCOD: true,
-            createdAt: { $gte: startOfDay, $lte: endOfDay },
+            status: "delivered",
+            deliveredAt: { $gte: startOfDay, $lte: endOfDay },
           },
         },
         {

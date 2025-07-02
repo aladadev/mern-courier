@@ -149,10 +149,13 @@ const DeliveryAgentDashboard = () => {
       );
       // Fetch metrics
       const today = new Date();
-      const start = today.toISOString().slice(0, 10); 
+      const start = today.toISOString().slice(0, 10);
       const end = today.toISOString().slice(0, 10);
       const mRes = await getAgentDashboardMetrics(token, start, end);
       const m = mRes.data.data || {};
+
+      console.log("Metrics", m);
+
       setMetrics({
         pending: m.statusBreakdown?.assigned || 0,
         active:
